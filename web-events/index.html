@@ -10,10 +10,12 @@
 			font-size: 17px;
 		}
 		.examples{
-			width: 80%;
-			height: 500px;
-			border: salmon solid 3px;
-			border-radius: 2%;
+			width: 90%;
+			height: 700px;
+			border-radius: 1%;
+			-webkit-box-shadow: 2px 4px 10px 0px rgba(50, 50, 50, 0.55);
+			-moz-box-shadow:    2px 4px 10px 0px rgba(50, 50, 50, 0.55);
+			box-shadow:         2px 4px 10px 0px rgba(50, 50, 50, 0.55);
 		}
 		.container{			
 			width: 90%;
@@ -25,18 +27,7 @@
 <body>
 	<div class="container">
 		<h2>Event Propagation Demo</h2>
-		<p>각 요소를 클릭해보며 이벤트가 어떻게 전파되는지 알아봅니다.</p>
-    	<iframe class="examples" src="//jsfiddle.net/JihyeHong/j9vqkhsd/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-
-    	<h2>preventDefault Demo</h2>
-		<p>이벤트의 기본적인 동작을 중단하는 preventDefault()에 대하여 알아봅니다.</p>
-		<p>a 태그를 클릭한 경우 기본적인 동작은 태그의 링크로 이동하는 것이지만, preventDefault()의 영향으로 해당 기본 동작은 작동하지 않습니다.</p>
-    	<iframe class="examples" src="//jsfiddle.net/JihyeHong/uvsce2gn/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-
-    	<h2>Passive EventHandler Demo</h2>
-		<p>이벤트 리스너의 옵션을 사용하여 Passive Eventhandler를 이용해봅니다.</p>
-		<p>a 태그에 preventDefault()가 적용되어 있지만, passive 옵션이 설정되어 preventDefault()는 동작하지 않게 됩니다.</p>
-    	<iframe class="examples" src="//jsfiddle.net/JihyeHong/k5mnbpj6/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+    	<iframe class="examples" src="//jsfiddle.net/JihyeHong/kpj2hjx9/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
     	<h2>References</h2>
     	<li><a href="https://developers.google.com/web/updates/2016/10/addeventlistener-once">Web Event List (MDN)</a></li>
