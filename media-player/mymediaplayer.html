@@ -22,7 +22,7 @@
   var video = document.querySelector('video');
   var playlist = getAwesomePlaylist();
 
-  for (var i=0; i < playlist; i++){
+  for (var i=0; i < playlist.length; i++){
     video.src = playlist[0].src;
     updateMetadata(i);
   }
