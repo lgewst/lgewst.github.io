@@ -7,86 +7,96 @@
 </head>
 
 <body>
-  <video preload="none" controls>
+  <video preload="none" width="480" controls>
     <track kind="subtitles" label="English" src="power-of-teamwork/subtitle_eng.vtt" default></track>
   </video>
 </body>
 
 <script type="text/javascript">
-  window.addEventListener('error', function(error) {
-    if (ChromeSamples && ChromeSamples.setStatus) {
-      console.error(error);
-      ChromeSamples.setStatus(error.message + ' (Your browser may not support this feature.)');
-      error.preventDefault();
-    }
-  });
 
-  var video = document.querySelector('video');
-  var playlist = getAwesomePlaylist();
-
-  for (var i=0; i < playlist.length; i++){
-    video.src = playlist[0].src;
-    updateMetadata(i);
+  if (!('mediaSession' in navigator)) {
+    console.log('The Media Session API is not yet available. Try Chrome for Android.');
   }
- 
-  function updateMetadata(index) {
-    var track = playlist[index];
 
-    console.log('Playing ' + track.title + ' track...');
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: track.title,
-      artist: track.artist,
-      artwork: track.artwork
+  // This prevents unnecessary errors when Media Session API is not available.
+  navigator.mediaSession = navigator.mediaSession || {};
+  navigator.mediaSession.setActionHandler = navigator.mediaSession.setActionHandler || function() {};
+  window.MediaMetadata = window.MediaMetadata || function() {};
+
+  if ('mediaSession' in navigator) {
+    var video = document.querySelector('video');
+    var playlist = getAwesomePlaylist();
+    var index = 0;
+
+    playVideo();
+
+    video.addEventListener('ended', function() {
+      // Play automatically the next track when video ends.
+      index = (index - 1 + playlist.length) % playlist.length;
+      playVideo();
     });
-  }
 
-  function getAwesomePlaylist() {
-    const BASE_URL = 'https://lgewst.github.io/media-player/';
+    navigator.mediaSession.setActionHandler('previoustrack', function() {
+      // User clicked "Previous Track" media notification icon.
+      index = (index - 1 + playlist.length) % playlist.length;
+      playVideo();
+    });
 
-    return [{
-        src: BASE_URL + 'power-of-teamwork/trailer.mp4',
-        title: 'Power Of Teamwork',
-        artist: 'Blender Foundation',
-        artwork: [
-          { src: BASE_URL + 'power-of-teamwork/artwork-128.jpg', sizes: '128x128', type: 'image/jpg' },
-          { src: BASE_URL + 'power-of-teamwork/artwork-192.jpg', sizes: '192x192', type: 'image/jpg' }
-        ]
-      }, {
-        src: 'https://storage.googleapis.com/media-session/big-buck-bunny/trailer.mov',
-        title: 'Big Buck Bunny',
-        artist: 'Blender Foundation',
-        artwork: [
-          { src: BASE_URL + 'big-buck-bunny/artwork-96.png',  sizes: '96x96',   type: 'image/png' },
-          { src: BASE_URL + 'big-buck-bunny/artwork-128.png', sizes: '128x128', type: 'image/png' }
-        ]
-      }];
-  }
+    navigator.mediaSession.setActionHandler('nexttrack', function() {
+      // User clicked "Next Track" media notification icon.
+      index = (index + 1) % playlist.length;
+      playVideo();
+    });
 
-   var ChromeSamples = {
-    log: function() {
-      var line = Array.prototype.slice.call(arguments).map(function(argument) {
-        return typeof argument === 'string' ? argument : JSON.stringify(argument);
-      }).join(' ');
+    function playVideo() {
+      video.src = playlist[index].src;
 
-      document.querySelector('#log').textContent += line + '\n';
-    },
+      video.load();
 
-    clearLog: function() {
-      document.querySelector('#log').textContent = '';
-    },
+      video.addEventListener('loadstart', function() {
+        updateMetadata(index);
+      });
 
-    setStatus: function(status) {
-      document.querySelector('#status').textContent = status;
-    },
-
-    setContent: function(newContent) {
-      var content = document.querySelector('#content');
-      while(content.hasChildNodes()) {
-        content.removeChild(content.lastChild);
-      }
-      content.appendChild(newContent);
+      video.play();
     }
-  };
+   
+    function updateMetadata(index) {
+      var track = playlist[index];
+
+      console.log('Playing ' + track.title + ' track...');
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: track.title,
+        artist: track.artist,
+        artwork: track.artwork
+      });
+    }
+
+    function getAwesomePlaylist() {
+      const BASE_URL = 'https://lgewst.github.io/media-player/';
+
+      return [{
+          src: BASE_URL + 'power-of-teamwork/trailer.mp4',
+          title: 'Power Of Teamwork',
+          artist: 'Blender Foundation',
+          artwork: [
+            { src: BASE_URL + 'power-of-teamwork/artwork-128.jpg', sizes: '128x128', type: 'image/jpg' },
+            { src: BASE_URL + 'power-of-teamwork/artwork-192.jpg', sizes: '192x192', type: 'image/jpg' }
+          ]
+        }, {
+          src: 'https://storage.googleapis.com/media-session/big-buck-bunny/trailer.mov',
+          title: 'Big Buck Bunny',
+          artist: 'Blender Foundation',
+          artwork: [
+            { src: BASE_URL + 'big-buck-bunny/artwork-96.png',  sizes: '96x96',   type: 'image/png' },
+            { src: BASE_URL + 'big-buck-bunny/artwork-128.png', sizes: '128x128', type: 'image/png' }
+          ]
+        }];
+    }
+
+  }
+
+  
+   
 
 </script>
 
