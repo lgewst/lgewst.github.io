@@ -5,11 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My Media Player</title>
 </head>
+
 <body>
   <video preload="none" controls>
     <track kind="subtitles" label="English" src="power-of-teamwork/subtitle_eng.vtt" default></track>
   </video>
 </body>
+
 <script type="text/javascript">
   window.addEventListener('error', function(error) {
     if (ChromeSamples && ChromeSamples.setStatus) {
@@ -27,10 +29,10 @@
     updateMetadata(i);
   }
  
-  var updateMetadata = function (index) {
+  function updateMetadata(index) {
     var track = playlist[index];
 
-    log('Playing ' + track.title + ' track...');
+    console.log('Playing ' + track.title + ' track...');
     navigator.mediaSession.metadata = new MediaMetadata({
       title: track.title,
       artist: track.artist,
@@ -38,7 +40,7 @@
     });
   }
 
-  var getAwesomePlaylist = function() {
+  function getAwesomePlaylist() {
     const BASE_URL = 'https://lgewst.github.io/media-player/';
 
     return [{
@@ -87,4 +89,5 @@
   };
 
 </script>
+
 </html>
