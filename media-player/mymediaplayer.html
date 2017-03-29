@@ -6,8 +6,59 @@
   <title>My Media Player</title>
 </head>
 <body>
-  <video src="powerofteamwork.mp4" type="video/mp4" controls="controls">
+  <video preload="none" controls>
     <track kind="subtitles" label="English" src="subtitle_eng.vtt" default></track>
   </video>
 </body>
+<script type="text/javascript">
+  window.addEventListener('error', function(error) {
+    if (ChromeSamples && ChromeSamples.setStatus) {
+      console.error(error);
+      ChromeSamples.setStatus(error.message + ' (Your browser may not support this feature.)');
+      error.preventDefault();
+    }
+  });
+
+  var video = document.querySelector('video');
+  var playlist = getAwesomePlaylist();
+
+  for (var i=0; i < playlist; i++){
+    video.src = playlist[0].src;
+    updateMetadata(i);
+  }
+ 
+  var updateMetadata = function (index) {
+    var track = playlist[index];
+
+    log('Playing ' + track.title + ' track...');
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: track.title,
+      artist: track.artist,
+      artwork: track.artwork
+    });
+  }
+
+  function getAwesomePlaylist() {
+    const BASE_URL = 'https://storage.googleapis.com/media-session/';
+
+    return [{
+        src: BASE_URL + 'power-of-teamwork/trailer.mp4',
+        title: 'Power Of Teamwork',
+        artist: 'Blender Foundation',
+        artwork: [
+          { src: BASE_URL + 'power-of-teamwork/artwork-128.jpg', sizes: '128x128', type: 'image/jpg' },
+          { src: BASE_URL + 'power-of-teamwork/artwork-192.jpg', sizes: '192x192', type: 'image/jpg' }
+        ]
+      }, {
+        src: BASE_URL + 'big-buck-bunny/trailer.mov',
+        title: 'Big Buck Bunny',
+        artist: 'Blender Foundation',
+        artwork: [
+          { src: BASE_URL + 'big-buck-bunny/artwork-96.png',  sizes: '96x96',   type: 'image/png' },
+          { src: BASE_URL + 'big-buck-bunny/artwork-128.png', sizes: '128x128', type: 'image/png' }
+        ]
+      }];
+  }
+
+</script>
 </html>
