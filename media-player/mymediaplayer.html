@@ -14,6 +14,7 @@
 
   if (!('mediaSession' in navigator)) {
     console.log('The Media Session API is not yet available. Try Chrome for Android.');
+    alert('The Media Session API is not yet available. Try Chrome for Android.');
   }
 
   // This prevents unnecessary errors when Media Session API is not available.
@@ -57,7 +58,7 @@
 
       video.play();
     }
-   
+
     function updateMetadata(index) {
       var track = playlist[index];
 
